@@ -24,7 +24,7 @@ As part of this deployment, a compute instance is created and Oracle Cloud Agent
 
 If you don't have the required permissions and quota, contact your tenancy administrator. See [Policy Reference](https://docs.cloud.oracle.com/en-us/iaas/Content/Identity/Reference/policyreference.htm), [Service Limits](https://docs.cloud.oracle.com/en-us/iaas/Content/General/Concepts/servicelimits.htm), [Compartment Quotas](https://docs.cloud.oracle.com/iaas/Content/General/Concepts/resourcequotas.htm).
 
-## Deploy Using Oracle Resource Manager
+## Deploy Using OCI Resource Manager
 
 1. Click [![Deploy to Oracle Cloud](https://oci-resourcemanager-plugin.plugins.oci.oraclecloud.com/latest/deploy-to-oracle-cloud.svg)](https://cloud.oracle.com/resourcemanager/stacks/create?zipUrl=https://github.com/oracle-quickstart/oci-ebs-monitoring/releases/download/v0.9/ebs-v0.9.zip)
 
@@ -49,27 +49,9 @@ If you don't have the required permissions and quota, contact your tenancy admin
 ### Clone the Module
 Now, you'll want a local copy of this repo. You can make that with the commands:
 
-    git clone https://github.com/oracle-quickstart/oci-observability-and-management.git
-    cd oci-observability-and-management/ebs-sensors-solution
+    git clonehttps://github.com/oracle-quickstart/oci-ebs-monitoring.git
+    cd oci-ebs-monitoring
     ls
-
-### Prerequisites
-First off, you'll need to do some pre-deploy setup for Docker and Fn Project inside your machine:
-
-```
-sudo su -
-yum update
-yum install yum-utils
-yum-config-manager --enable *addons
-yum install docker-engine
-groupadd docker
-service docker restart
-usermod -a -G docker opc
-chmod 666 /var/run/docker.sock
-exit
-curl -LSs https://raw.githubusercontent.com/fnproject/cli/master/install | sh
-exit
-```
   
 ### Set Up and Configure Terraform
 
