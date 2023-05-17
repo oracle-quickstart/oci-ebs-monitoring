@@ -21,12 +21,13 @@ As part of this deployment, a compute instance is created and Oracle Cloud Agent
 - Quota to create the following resources: 1 Compute instance,  1 dynamic group, 1 policy
 - Store EBS DB password in OCI Vault in base encoded form. 
 - Store schedule file in OCI Object Storage bucket. 
+- If you use APPS user to monitor database, no additional step required. If you don't want to use APPS user, then you need to create database user with access to select from tables used in the sensors. Use USER_ACCESS_TABLES.md file.
 
 If you don't have the required permissions and quota, contact your tenancy administrator. See [Policy Reference](https://docs.cloud.oracle.com/en-us/iaas/Content/Identity/Reference/policyreference.htm), [Service Limits](https://docs.cloud.oracle.com/en-us/iaas/Content/General/Concepts/servicelimits.htm), [Compartment Quotas](https://docs.cloud.oracle.com/iaas/Content/General/Concepts/resourcequotas.htm).
 
-## Deploy Using OCI Resource Manager
+## Deploy Using Oracle Resource Manager
 
-1. Click [![Deploy to Oracle Cloud](https://oci-resourcemanager-plugin.plugins.oci.oraclecloud.com/latest/deploy-to-oracle-cloud.svg)](https://cloud.oracle.com/resourcemanager/stacks/create?zipUrl=https://github.com/oracle-quickstart/oci-ebs-monitoring/releases/download/v0.9/ebs-v0.9.zip)
+1. Click [![Deploy to Oracle Cloud](https://oci-resourcemanager-plugin.plugins.oci.oraclecloud.com/latest/deploy-to-oracle-cloud.svg)]()
 
 #    If you aren't already signed in, when prompted, enter the tenancy and user credentials.
 
@@ -49,9 +50,27 @@ If you don't have the required permissions and quota, contact your tenancy admin
 ### Clone the Module
 Now, you'll want a local copy of this repo. You can make that with the commands:
 
-    git clonehttps://github.com/oracle-quickstart/oci-ebs-monitoring.git
-    cd oci-ebs-monitoring
+    git clone https://github.com/oracle-quickstart/oci-observability-and-management.git
+    cd oci-observability-and-management/ebs-sensors-solution
     ls
+
+### Prerequisites
+First off, you'll need to do some pre-deploy setup for Docker and Fn Project inside your machine:
+
+```
+sudo su -
+yum update
+yum install yum-utils
+yum-config-manager --enable *addons
+yum install docker-engine
+groupadd docker
+service docker restart
+usermod -a -G docker opc
+chmod 666 /var/run/docker.sock
+exit
+curl -LSs https://raw.githubusercontent.com/fnproject/cli/master/install | sh
+exit
+```
   
 ### Set Up and Configure Terraform
 
