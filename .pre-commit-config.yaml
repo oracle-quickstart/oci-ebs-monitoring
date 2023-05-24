@@ -1,0 +1,16 @@
+# Copyright (c) 2023, Oracle and/or its affiliates.
+# Licensed under the Universal Permissive License v1.0 as shown at https://oss.oracle.com/licenses/upl.
+
+repos:
+- repo: https://github.com/pre-commit/pre-commit-hooks
+  rev: v2.3.0
+  hooks:
+    - id: check-yaml
+      args: [--allow-multiple-documents]
+      exclude: '^charts/.*/templates/'
+    - id: end-of-file-fixer
+    - id: trailing-whitespace
+   #- id: check-json
+    - id: check-merge-conflict
+    - id: check-xml
+    - id: check-symlinks
