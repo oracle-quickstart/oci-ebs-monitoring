@@ -39,7 +39,7 @@ ORA-14080 and/or ORA-02149]]></Description>
     <Patterns>
         <DBPattern dateTimeField="entrytime" dateTimeColumns="entrytime">
         <SQLQuery>
-            <![CDATA[select 'ME$EBS_MFG_VCP_MISSING_0_PARTITION' sensor, to_timestamp(to_char(sysdate, 'YYYY-MM-DD hh24:mi:ss'), 'YYYY-MM-DD hh24:mi:ss') entrytime, 'table_name:' || s.table_name || ', plan_id_flag:' || s.plan_id_flag key_data FROM (select table_name table_name, plan_id_flag plan_id_flag from (select b.table_name table_name, nvl(plan_id_flag,'N') plan_id_flag  From apps.MSC_ODS_TABLE_V B, DBA_PART_TABLES ptab  WHERE b.PARTITION_TYPE='R'  and b.instance_id_flag in ('Y')  and b.table_name = ptab.table_name  and ptab.owner='MSC'  AND NOT EXISTS (select 1  FROM all_tab_partitions atp  WHERE atp.table_name = b.table_name AND  atp.table_owner = 'MSC' AND  atp.partition_name = substr(b.table_name, 5) || '_0'))) s]]>
+            <![CDATA[select 'ME$EBS_MFG_VCP_MISSING_0_PARTITION' sensor, to_timestamp(to_char(sysdate, 'YYYY-MM-DD hh24:mi:ss'), 'YYYY-MM-DD hh24:mi:ss') entrytime, 'table_name:' || s.table_name || ', plan_id_flag:' || s.plan_id_flag key_data FROM (select table_name table_name, plan_id_flag plan_id_flag from (select b.table_name table_name, nvl(plan_id_flag,'N') plan_id_flag  From apps.MSC_ODS_TABLE_V B, sys.DBA_PART_TABLES ptab  WHERE b.PARTITION_TYPE='R'  and b.instance_id_flag in ('Y')  and b.table_name = ptab.table_name  and ptab.owner='MSC'  AND NOT EXISTS (select 1  FROM sys.all_tab_partitions atp  WHERE atp.table_name = b.table_name AND  atp.table_owner = 'MSC' AND  atp.partition_name = substr(b.table_name, 5) || '_0'))) s]]>
         </SQLQuery>
         <IsInclude>1</IsInclude>
             <InUse>1</InUse>

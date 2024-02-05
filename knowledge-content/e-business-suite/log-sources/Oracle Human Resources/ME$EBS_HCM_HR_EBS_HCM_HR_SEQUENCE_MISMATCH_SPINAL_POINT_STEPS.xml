@@ -20,25 +20,25 @@
     </Field>
     
     <Tag>
-<Name>#medium_severity_sensor</Name>
-<DisplayName>Medium Severity Sensor</DisplayName>
+<Name>#low_severity_sensor</Name>
+<DisplayName>Low Severity Sensor</DisplayName>
 <IsSystem>0</IsSystem>
-<ProblemPriority>MEDIUM</ProblemPriority>
+<ProblemPriority>LOW</ProblemPriority>
 </Tag>
-    <Source name="EBS Sensor: FIN PA Expenditure Item cost burden distributed flag is disabled but Burden Distributions Generated - Weekly" oms_version="2.50.2.0.0" configWarningSettings="0">
+    <Source name="EBS Sensor: HCM HR Invalid Sequence Number Mismatch On PER SPINAL POINT STEPS F and PER SPINAL POINTS tables - Weekly" oms_version="2.50.2.0.0" configWarningSettings="0">
     <SourceType>database_sql</SourceType>
     <TargetTypes>
         <TargetType>omc_oracle_db_instance</TargetType>
         <TargetType>omc_oracle_pdb</TargetType>
     </TargetTypes>
-    <DisplayName>EBS Sensor: FIN PA Expenditure Item cost burden distributed flag is disabled but Burden Distributions Generated - Weekly</DisplayName>
-    <Description><![CDATA[Expenditure Item cost burden distributed flag is disabled but Burden Lines are already generated]]></Description>
+    <DisplayName>EBS Sensor: HCM HR Invalid Sequence Number Mismatch On PER SPINAL POINT STEPS F and PER SPINAL POINTS tables - Weekly</DisplayName>
+    <Description><![CDATA[Invalid Sequence Number Mismatch On PER_SPINAL_POINT_STEPS_F and PER_SPINAL_POINTS tables.]]></Description>
     <IsSystem>0</IsSystem>
     <IsSecureContent>1</IsSecureContent>
     <Patterns>
         <DBPattern dateTimeField="entrytime" dateTimeColumns="entrytime">
         <SQLQuery>
-            <![CDATA[select 'ME$EBS_FIN_PA_BURD_CDL_GEN_FOR_COST_BUDERN_DISABLED_EI' sensor, to_timestamp(to_char(sysdate, 'YYYY-MM-DD hh24:mi:ss'), 'YYYY-MM-DD hh24:mi:ss') entrytime, 'cost_distributed_flag:' || s.cost_distributed_flag || ', cost_burden_distributed_flag:' || s.cost_burden_distributed_flag || ', project_number:' || s.project_number || ', task_number:' || s.task_number || ', ind_cost_dist_rejection_code:' || s.ind_cost_dist_rejection_code || ', expenditure_item_id:' || s.expenditure_item_id key_data FROM (SELECT ei.expenditure_item_id expenditure_item_id,         ei.cost_distributed_flag cost_distributed_flag,         ei.cost_burden_distributed_flag cost_burden_distributed_flag,         p.segment1 project_number,         t.task_number task_number,         ei.ind_cost_dist_rejection_code ind_cost_dist_rejection_code  FROM apps.pa_expenditure_items_all ei,       apps.pa_projects_all p,       apps.pa_project_types_all pt,       apps.pa_tasks t  WHERE nvl(ei.cost_burden_distributed_flag, 'Z') NOT IN ('Y','N')  AND   ei.project_id = p.project_id  AND   p.project_type = pt.project_type  AND   pt.total_burden_flag = 'Y'  AND   p.org_id = pt.org_id  AND   ei.system_linkage_function <> 'BTC'  AND   ei.task_id = t.task_id  AND   p.project_id = t.project_id  AND   EXISTS (          SELECT 1 FROM apps.pa_cost_distribution_lines_all cdl          WHERE cdl.expenditure_item_id = ei.expenditure_item_id          AND   cdl.project_id = ei.project_id          AND   cdl.task_id = ei.task_id          AND   line_type IN ('C','D'))  AND   ei.creation_date >= SYSDATE - 7  AND   rownum <= 5) s]]>
+            <![CDATA[select 'ME$EBS_HCM_HR_EBS_HCM_HR_SEQUENCE_MISMATCH_SPINAL_POINT_STEPS' sensor, to_timestamp(to_char(sysdate, 'YYYY-MM-DD hh24:mi:ss'), 'YYYY-MM-DD hh24:mi:ss') entrytime, 'Spinal_Point_Id:' || s.Spinal_Point_Id || ', Sequence_SPINAL_STEPS_F:' || s.Sequence_SPINAL_STEPS_F || ', Sequence_PER_SPINAL_POINTS:' || s.Sequence_PER_SPINAL_POINTS || ', Step_Id:' || s.Step_Id key_data FROM (SELECT psp.spinal_point_id  Spinal_Point_Id             ,psps.sequence  Sequence_SPINAL_STEPS_F             ,psp.sequence Sequence_PER_SPINAL_POINTS             ,psps.step_id  Step_Id  FROM apps.PER_SPINAL_POINT_STEPS_F psps,          apps.PER_SPINAL_POINTS psp  WHERE psp.spinal_point_id = psps.spinal_point_id  AND psp.sequence IS NOT NULL  AND psp.sequence <> psps.sequence  AND rownum<100  ) s]]>
         </SQLQuery>
         <IsInclude>1</IsInclude>
             <InUse>1</InUse>
@@ -67,7 +67,7 @@
                     <ConditionValue>%</ConditionValue>
                 </ConditionValues>
                 <ConditionTags tagField="mtag">
-                    <ConditionTag>#medium_severity_sensor</ConditionTag>
+                    <ConditionTag>#low_severity_sensor</ConditionTag>
                 </ConditionTags>
                 <IsSystem>0</IsSystem>
                 <IsEnabled>1</IsEnabled>

@@ -25,20 +25,20 @@
 <IsSystem>0</IsSystem>
 <ProblemPriority>MEDIUM</ProblemPriority>
 </Tag>
-    <Source name="EBS Sensor: FIN PA Expenditure Item cost burden distributed flag is disabled but Burden Distributions Generated - Weekly" oms_version="2.50.2.0.0" configWarningSettings="0">
+    <Source name="EBS Sensor: FIN AP Incorrect technical rounding - Weekly" oms_version="2.50.2.0.0" configWarningSettings="0">
     <SourceType>database_sql</SourceType>
     <TargetTypes>
         <TargetType>omc_oracle_db_instance</TargetType>
         <TargetType>omc_oracle_pdb</TargetType>
     </TargetTypes>
-    <DisplayName>EBS Sensor: FIN PA Expenditure Item cost burden distributed flag is disabled but Burden Distributions Generated - Weekly</DisplayName>
-    <Description><![CDATA[Expenditure Item cost burden distributed flag is disabled but Burden Lines are already generated]]></Description>
+    <DisplayName>EBS Sensor: FIN AP Incorrect technical rounding - Weekly</DisplayName>
+    <Description><![CDATA[Incorrect technical rounding on the column Invoice_Dist_Base_Amount in the table AP_PAYMENT_HIST_DISTS causing Incorrect Payment Accounting <br/><strong>Im]]></Description>
     <IsSystem>0</IsSystem>
     <IsSecureContent>1</IsSecureContent>
     <Patterns>
         <DBPattern dateTimeField="entrytime" dateTimeColumns="entrytime">
         <SQLQuery>
-            <![CDATA[select 'ME$EBS_FIN_PA_BURD_CDL_GEN_FOR_COST_BUDERN_DISABLED_EI' sensor, to_timestamp(to_char(sysdate, 'YYYY-MM-DD hh24:mi:ss'), 'YYYY-MM-DD hh24:mi:ss') entrytime, 'cost_distributed_flag:' || s.cost_distributed_flag || ', cost_burden_distributed_flag:' || s.cost_burden_distributed_flag || ', project_number:' || s.project_number || ', task_number:' || s.task_number || ', ind_cost_dist_rejection_code:' || s.ind_cost_dist_rejection_code || ', expenditure_item_id:' || s.expenditure_item_id key_data FROM (SELECT ei.expenditure_item_id expenditure_item_id,         ei.cost_distributed_flag cost_distributed_flag,         ei.cost_burden_distributed_flag cost_burden_distributed_flag,         p.segment1 project_number,         t.task_number task_number,         ei.ind_cost_dist_rejection_code ind_cost_dist_rejection_code  FROM apps.pa_expenditure_items_all ei,       apps.pa_projects_all p,       apps.pa_project_types_all pt,       apps.pa_tasks t  WHERE nvl(ei.cost_burden_distributed_flag, 'Z') NOT IN ('Y','N')  AND   ei.project_id = p.project_id  AND   p.project_type = pt.project_type  AND   pt.total_burden_flag = 'Y'  AND   p.org_id = pt.org_id  AND   ei.system_linkage_function <> 'BTC'  AND   ei.task_id = t.task_id  AND   p.project_id = t.project_id  AND   EXISTS (          SELECT 1 FROM apps.pa_cost_distribution_lines_all cdl          WHERE cdl.expenditure_item_id = ei.expenditure_item_id          AND   cdl.project_id = ei.project_id          AND   cdl.task_id = ei.task_id          AND   line_type IN ('C','D'))  AND   ei.creation_date >= SYSDATE - 7  AND   rownum <= 5) s]]>
+            <![CDATA[select 'ME$EBS_FIN_AP_MU_FOREIGN_CURRENCY_PAYMENT_INCORRECT_ACCOUNTING' sensor, to_timestamp(to_char(sysdate, 'YYYY-MM-DD hh24:mi:ss'), 'YYYY-MM-DD hh24:mi:ss') entrytime, 'check_id:' || s.check_id key_data FROM (SELECT      check_id check_id  FROM      (          WITH chks AS (              SELECT /*+ materialize */ DISTINCT                  ph.check_id              FROM                  APPS.ap_payment_history_all ph              WHERE                  ph.accounting_date BETWEEN ( trunc(sysdate) - 7 ) AND ( trunc(sysdate) + 3 )          )  SELECT aip.check_id,            aip.org_id,            aip.invoice_id     FROM APPS.ap_invoice_payments_all aip,          APPS.ap_payment_history_all aph,          APPS.ap_payment_hist_dists aphd,          APPS.ap_system_parameters_all asp,           chks     WHERE aip.check_id = aph.check_id     AND   aphd.invoice_payment_id = aip.invoice_payment_id     AND   aphd.pay_dist_lookup_code = 'CASH'     AND   aip.accounting_event_id = aphd.accounting_event_id     AND   aip.accounting_event_id = aph.accounting_event_id     AND   aph.payment_history_id = aphd.payment_history_id     AND   aph.historical_flag is null     AND   aph.pmt_currency_code <> asp.base_currency_code     AND   aph.org_id = asp.org_id     AND   aph.transaction_type IN ('PAYMENT CREATED' , 'REFUND RECORDED')     AND   aph.posted_flag = 'Y'     AND   aip.check_id = chks.check_id     GROUP BY aip.check_id, aip.org_id, aip.invoice_id, aip.invoice_payment_id,              aip.invoice_base_amount, aip.accounting_event_id, aip.amount     HAVING   sum(nvl(aphd.invoice_dist_base_amount, invoice_dist_amount)) !=                nvl(aip.invoice_base_amount,aip.amount)            )  WHERE      ROWNUM < 11  ORDER BY      check_id  ) s]]>
         </SQLQuery>
         <IsInclude>1</IsInclude>
             <InUse>1</InUse>
