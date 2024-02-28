@@ -25,20 +25,20 @@
 <IsSystem>0</IsSystem>
 <ProblemPriority>MEDIUM</ProblemPriority>
 </Tag>
-    <Source name="EBS Sensor: FIN PA Expenditure Item cost burden distributed flag is disabled but Burden Distributions Generated - Weekly" oms_version="2.50.2.0.0" configWarningSettings="0">
+    <Source name="EBS Sensor: ATG WF Event oracle apps fnd umx requestapproved References Non existent Package AMW VIOLATION PVT - Weekly" oms_version="2.50.2.0.0" configWarningSettings="0">
     <SourceType>database_sql</SourceType>
     <TargetTypes>
         <TargetType>omc_oracle_db_instance</TargetType>
         <TargetType>omc_oracle_pdb</TargetType>
     </TargetTypes>
-    <DisplayName>EBS Sensor: FIN PA Expenditure Item cost burden distributed flag is disabled but Burden Distributions Generated - Weekly</DisplayName>
-    <Description><![CDATA[Expenditure Item cost burden distributed flag is disabled but Burden Lines are already generated]]></Description>
+    <DisplayName>EBS Sensor: ATG WF Event oracle apps fnd umx requestapproved References Non existent Package AMW VIOLATION PVT - Weekly</DisplayName>
+    <Description><![CDATA[Event oracle.apps.fnd.umx.requestapproved References Non-existent Package AMW_VIOLATION_PVT (Doc ID 1633588.1)]]></Description>
     <IsSystem>0</IsSystem>
     <IsSecureContent>1</IsSecureContent>
     <Patterns>
         <DBPattern dateTimeField="entrytime" dateTimeColumns="entrytime">
         <SQLQuery>
-            <![CDATA[select 'ME$EBS_FIN_PA_BURD_CDL_GEN_FOR_COST_BUDERN_DISABLED_EI' sensor, to_timestamp(to_char(sysdate, 'YYYY-MM-DD hh24:mi:ss'), 'YYYY-MM-DD hh24:mi:ss') entrytime, 'cost_distributed_flag:' || s.cost_distributed_flag || ', cost_burden_distributed_flag:' || s.cost_burden_distributed_flag || ', project_number:' || s.project_number || ', task_number:' || s.task_number || ', ind_cost_dist_rejection_code:' || s.ind_cost_dist_rejection_code || ', expenditure_item_id:' || s.expenditure_item_id key_data FROM (SELECT ei.expenditure_item_id expenditure_item_id,         ei.cost_distributed_flag cost_distributed_flag,         ei.cost_burden_distributed_flag cost_burden_distributed_flag,         p.segment1 project_number,         t.task_number task_number,         ei.ind_cost_dist_rejection_code ind_cost_dist_rejection_code  FROM apps.pa_expenditure_items_all ei,       apps.pa_projects_all p,       apps.pa_project_types_all pt,       apps.pa_tasks t  WHERE nvl(ei.cost_burden_distributed_flag, 'Z') NOT IN ('Y','N')  AND   ei.project_id = p.project_id  AND   p.project_type = pt.project_type  AND   pt.total_burden_flag = 'Y'  AND   p.org_id = pt.org_id  AND   ei.system_linkage_function <> 'BTC'  AND   ei.task_id = t.task_id  AND   p.project_id = t.project_id  AND   EXISTS (          SELECT 1 FROM apps.pa_cost_distribution_lines_all cdl          WHERE cdl.expenditure_item_id = ei.expenditure_item_id          AND   cdl.project_id = ei.project_id          AND   cdl.task_id = ei.task_id          AND   line_type IN ('C','D'))  AND   ei.creation_date >= SYSDATE - 7  AND   rownum <= 5) s]]>
+            <![CDATA[select 'ME$EBS_ATG_WF_AMW_VIOLATION_PVT' sensor, to_timestamp(to_char(sysdate, 'YYYY-MM-DD hh24:mi:ss'), 'YYYY-MM-DD hh24:mi:ss') entrytime, 'dummyalias:' || s.dummyalias key_data FROM (SELECT      dummy dummyalias  FROM      dual,      (          SELECT              *          FROM              apps.wf_event_subscriptions          WHERE              event_filter_guid IN (                  SELECT                      guid                  FROM                      apps.wf_events                  WHERE                      name = 'oracle.apps.fnd.umx.requestapproved'              )              AND status = 'ENABLED'      )) s]]>
         </SQLQuery>
         <IsInclude>1</IsInclude>
             <InUse>1</InUse>

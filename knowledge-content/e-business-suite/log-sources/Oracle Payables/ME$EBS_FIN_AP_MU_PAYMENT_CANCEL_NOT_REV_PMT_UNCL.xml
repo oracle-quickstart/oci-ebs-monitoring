@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LoganContent oms_version="2.50.2.0.0" name="content_ocid1.tenancy.oc1..aaaaaaaa5s2vdjjrydixjulorcwozffbpna37w5a35p3jhgpyshlkmio6oiq_1650039506307" content_version="2.50.2.0.0" xmlns="http://www.oracle.com/DataCenter/LogAnalyticsStd">
+    <Field oms_version="2.50.2.0.0">
+        <DisplayName>sensor</DisplayName>
+        <FieldType>1</FieldType>
+        <IsSystem>0</IsSystem>
+        <IsPrimary>1</IsPrimary>
+        <DataType>STRING</DataType>
+        <IsMetricKeyEligible>0</IsMetricKeyEligible>
+        <IsMetricValueEligible>0</IsMetricValueEligible>
+        <FacetEligible>1</FacetEligible>
+        <RangeFacetEligible>0</RangeFacetEligible>
+        <TableEligible>1</TableEligible>
+        <FacetPriority>1</FacetPriority>
+        <Summarizable>1</Summarizable>
+        <HighCardinality>1</HighCardinality>
+        <LargeData>0</LargeData>
+        <MultiValued>0</MultiValued>
+        <SMAEnabledSetting>0</SMAEnabledSetting>
+    </Field>
+    
+    <Tag>
+<Name>#medium_severity_sensor</Name>
+<DisplayName>Medium Severity Sensor</DisplayName>
+<IsSystem>0</IsSystem>
+<ProblemPriority>MEDIUM</ProblemPriority>
+</Tag>
+    <Source name="EBS Sensor: FIN AP Payment Cancellation does not reverse Payment Unclearing - Weekly" oms_version="2.50.2.0.0" configWarningSettings="0">
+    <SourceType>database_sql</SourceType>
+    <TargetTypes>
+        <TargetType>omc_oracle_db_instance</TargetType>
+        <TargetType>omc_oracle_pdb</TargetType>
+    </TargetTypes>
+    <DisplayName>EBS Sensor: FIN AP Payment Cancellation does not reverse Payment Unclearing - Weekly</DisplayName>
+    <Description><![CDATA[Payment Cancellation does not reverse Payment Unclearing resulting in incorrect Accounting]]></Description>
+    <IsSystem>0</IsSystem>
+    <IsSecureContent>1</IsSecureContent>
+    <Patterns>
+        <DBPattern dateTimeField="entrytime" dateTimeColumns="entrytime">
+        <SQLQuery>
+            <![CDATA[select 'ME$EBS_FIN_AP_MU_PAYMENT_CANCEL_NOT_REV_PMT_UNCL' sensor, to_timestamp(to_char(sysdate, 'YYYY-MM-DD hh24:mi:ss'), 'YYYY-MM-DD hh24:mi:ss') entrytime, 'check_id:' || s.check_id key_data FROM (SELECT      check_id check_id  FROM      (          WITH chks AS (              SELECT /*+ materialize */ DISTINCT                  ph.check_id              FROM                  APPS.ap_payment_history_all ph              WHERE                  ph.accounting_date BETWEEN ( trunc(sysdate) - 7 ) AND ( trunc(sysdate) + 3 )          )        SELECT pt.check_id,            pt.check_number,            pt.org_id,            pt.check_date,            pt.amount check_amount,            aph.payment_history_id,            aph.transaction_type,            aph.accounting_event_id event_id,            aph.posted_flag,            pt.acctd_cash     FROM (            SELECT /*+ ordered use_nl(ac, aph, asp, xe) */                   ac.org_id,                   ac.check_number,                   ac.check_id,                   ac.check_date,                   ac.amount,                   xah.ledger_id,                   sum(nvl(entered_cr,0) - nvl(entered_dr,0)) acctd_cash            FROM  chks,                 APPS.ap_checks_all ac,                 APPS.ap_payment_history_all aph,                 APPS.ap_system_parameters_all asp,                 APPS.xla_events xe,                 APPS.xla_ae_headers xah,                 APPS.xla_ae_lines xal            WHERE ac.check_id = aph.check_id            AND   aph.accounting_event_id = xe.event_id            AND   xe.event_id = xah.event_id            AND   xal.ae_header_id = xah.ae_header_id            AND   accounting_class_code like 'CASH%CLEAR%'            AND   asp.org_id = ac.org_id            AND   asp.set_of_books_id = xah.ledger_id            AND   ac.void_date       is not null            AND   ac.check_date       > (                    SELECT MIN(TRUNC(creation_date)) FROM APPS.ad_applied_patches                    WHERE patch_type = 'MAINTENANCE-PACK'                    AND   maint_pack_level LIKE '12.0%')            AND   NOT EXISTS (                    SELECT /*+ no_unnest */ 1 FROM APPS.ap_payment_history_all aph1                    WHERE aph1.check_id = ac.check_id                    AND   posted_flag <> 'Y')            AND   EXISTS (                    SELECT /*+ no_unnest */ 1                    FROM APPS.ap_payment_history_all aph2,                         APPS.xla_events xe2                    WHERE aph2.check_id = ac.check_id                    AND   aph2.accounting_event_id = xe2.event_id                    AND   aph2.posted_flag = 'Y'                    AND   xe2.event_status_code = 'P'                    AND   xe2.process_status_code = 'P'                    AND   aph2.transaction_type = 'PAYMENT UNCLEARING')            AND   ac.check_id = chks.check_id            GROUP BY ac.org_id, ac.check_number, ac.check_id, ac.amount,                     ac.check_date, xah.ledger_id            HAVING   0 <> sum(nvl(entered_cr,0) - nvl(entered_dr,0))          ) pt,          APPS.ap_payment_history_all aph,          APPS.xla_ae_headers xah     WHERE aph.check_id = pt.check_id     AND   aph.accounting_event_id = xah.event_id     AND   xah.application_id = 200     AND   xah.ledger_id = pt.ledger_id     AND   aph.transaction_type IN ('PAYMENT CANCELLED',             'REFUND CANCELLED')     AND   EXISTS (             SELECT /*+ no_unnest */ 1             FROM APPS.ap_payment_history_all aph2,                  APPS.xla_distribution_links xdl1             WHERE aph2.transaction_type = 'PAYMENT CLEARING'             AND   aph2.check_id = aph.check_id             AND   xdl1.ref_event_id = aph2.accounting_event_id             AND   xdl1.ae_header_id = xah.ae_header_id             AND   xdl1.application_id = 200)     AND   NOT EXISTS (             SELECT /*+ no_unnest */ 1             FROM APPS.ap_payment_history_all aph3,                  APPS.xla_distribution_links xdl2             WHERE aph3.transaction_type = 'PAYMENT UNCLEARING'             AND   aph3.check_id = aph.check_id             AND   xdl2.ref_event_id = aph3.accounting_event_id             AND   xdl2.ae_header_id = xah.ae_header_id             AND   xdl2.application_id = 200)          )  WHERE      ROWNUM < 11  ORDER BY      check_id  ) s]]>
+        </SQLQuery>
+        <IsInclude>1</IsInclude>
+            <InUse>1</InUse>
+            <DBQueryFieldList>
+                <DBPatternSeqField>entrytime</DBPatternSeqField>
+                <DBPatternField>
+                    <DBQueryColName>sensor</DBQueryColName>
+                    <FieldName>udfs1</FieldName>
+                </DBPatternField>
+                <DBPatternField>
+                    <DBQueryColName>entrytime</DBQueryColName>
+                    <FieldName>time</FieldName>
+                </DBPatternField>
+                <DBPatternField>
+                                        <DBQueryColName>key_data</DBQueryColName>
+                                        <FieldName>probkey</FieldName>
+                                   </DBPatternField>
+            </DBQueryFieldList>
+            <IsSystem>0</IsSystem>
+            <IsEnabled>1</IsEnabled>
+            </DBPattern>
+    </Patterns>
+        <TagConditions>
+            <TagCondition operator="CONTAINS_REGEX" field="udfs1" alertRuleVisible="0">
+                <ConditionValues>
+                    <ConditionValue>%</ConditionValue>
+                </ConditionValues>
+                <ConditionTags tagField="mtag">
+                    <ConditionTag>#medium_severity_sensor</ConditionTag>
+                </ConditionTags>
+                <IsSystem>0</IsSystem>
+                <IsEnabled>1</IsEnabled>
+            </TagCondition>
+        </TagConditions>
+        <IsHidden>0</IsHidden>
+        <IsSMAEnabled>0</IsSMAEnabled>
+    </Source>
+    <FieldNameMaps>
+        <FieldNameMap>
+            <Name>udfs1</Name>
+            <DisplayName>sensor</DisplayName>
+        </FieldNameMap>
+        
+    </FieldNameMaps>
+</LoganContent>

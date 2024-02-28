@@ -25,20 +25,20 @@
 <IsSystem>0</IsSystem>
 <ProblemPriority>MEDIUM</ProblemPriority>
 </Tag>
-    <Source name="EBS Sensor: FIN PA Expenditure Item cost burden distributed flag is disabled but Burden Distributions Generated - Weekly" oms_version="2.50.2.0.0" configWarningSettings="0">
+    <Source name="EBS Sensor: FIN AP Payment accounting is incorrect because bank charges are applied - Weekly" oms_version="2.50.2.0.0" configWarningSettings="0">
     <SourceType>database_sql</SourceType>
     <TargetTypes>
         <TargetType>omc_oracle_db_instance</TargetType>
         <TargetType>omc_oracle_pdb</TargetType>
     </TargetTypes>
-    <DisplayName>EBS Sensor: FIN PA Expenditure Item cost burden distributed flag is disabled but Burden Distributions Generated - Weekly</DisplayName>
-    <Description><![CDATA[Expenditure Item cost burden distributed flag is disabled but Burden Lines are already generated]]></Description>
+    <DisplayName>EBS Sensor: FIN AP Payment accounting is incorrect because bank charges are applied - Weekly</DisplayName>
+    <Description><![CDATA[Payment accounting is incorrect because bank charges are applied even though the bank and payment currencies are the same. Result is a 95353 error during a]]></Description>
     <IsSystem>0</IsSystem>
     <IsSecureContent>1</IsSecureContent>
     <Patterns>
         <DBPattern dateTimeField="entrytime" dateTimeColumns="entrytime">
         <SQLQuery>
-            <![CDATA[select 'ME$EBS_FIN_PA_BURD_CDL_GEN_FOR_COST_BUDERN_DISABLED_EI' sensor, to_timestamp(to_char(sysdate, 'YYYY-MM-DD hh24:mi:ss'), 'YYYY-MM-DD hh24:mi:ss') entrytime, 'cost_distributed_flag:' || s.cost_distributed_flag || ', cost_burden_distributed_flag:' || s.cost_burden_distributed_flag || ', project_number:' || s.project_number || ', task_number:' || s.task_number || ', ind_cost_dist_rejection_code:' || s.ind_cost_dist_rejection_code || ', expenditure_item_id:' || s.expenditure_item_id key_data FROM (SELECT ei.expenditure_item_id expenditure_item_id,         ei.cost_distributed_flag cost_distributed_flag,         ei.cost_burden_distributed_flag cost_burden_distributed_flag,         p.segment1 project_number,         t.task_number task_number,         ei.ind_cost_dist_rejection_code ind_cost_dist_rejection_code  FROM apps.pa_expenditure_items_all ei,       apps.pa_projects_all p,       apps.pa_project_types_all pt,       apps.pa_tasks t  WHERE nvl(ei.cost_burden_distributed_flag, 'Z') NOT IN ('Y','N')  AND   ei.project_id = p.project_id  AND   p.project_type = pt.project_type  AND   pt.total_burden_flag = 'Y'  AND   p.org_id = pt.org_id  AND   ei.system_linkage_function <> 'BTC'  AND   ei.task_id = t.task_id  AND   p.project_id = t.project_id  AND   EXISTS (          SELECT 1 FROM apps.pa_cost_distribution_lines_all cdl          WHERE cdl.expenditure_item_id = ei.expenditure_item_id          AND   cdl.project_id = ei.project_id          AND   cdl.task_id = ei.task_id          AND   line_type IN ('C','D'))  AND   ei.creation_date >= SYSDATE - 7  AND   rownum <= 5) s]]>
+            <![CDATA[select 'ME$EBS_FIN_AP_MU_INVALID_BANK_CHARGE' sensor, to_timestamp(to_char(sysdate, 'YYYY-MM-DD hh24:mi:ss'), 'YYYY-MM-DD hh24:mi:ss') entrytime, 'check_id:' || s.check_id key_data FROM (SELECT      check_id check_id  FROM      (          WITH chks AS (              SELECT /*+ materialize */ DISTINCT                  ph.check_id              FROM                  APPS.ap_payment_history_all ph              WHERE                  ph.accounting_date BETWEEN ( trunc(sysdate) - 7 ) AND ( trunc(sysdate) + 3 )          )  SELECT aph.check_id,            aph.payment_history_id,            aph.accounting_event_id,            aph.transaction_type,            aph.accounting_date,            aph.posted_flag,            aph.org_id,            aph.charges_bank_amount,            aph.trx_bank_amount,            aph.trx_pmt_amount,            aph.bank_currency_code,            aph.pmt_currency_code     FROM  chks,          APPS.ap_payment_history_all aph,          APPS.ap_system_parameters_all asp     WHERE aph.check_id = chks.check_id     AND   aph.transaction_type IN ('PAYMENT CLEARING', 'PAYMENT UNCLEARING')     AND   aph.bank_currency_code = aph.pmt_currency_code     AND   aph.org_id = asp.org_id     AND   aph.bank_currency_code = asp.base_currency_code     AND   nvl(CHARGES_BANK_AMOUNT,0) ! = 0          )  WHERE      ROWNUM < 11  ORDER BY      check_id  ) s]]>
         </SQLQuery>
         <IsInclude>1</IsInclude>
             <InUse>1</InUse>

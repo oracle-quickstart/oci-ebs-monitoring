@@ -25,20 +25,20 @@
 <IsSystem>0</IsSystem>
 <ProblemPriority>MEDIUM</ProblemPriority>
 </Tag>
-    <Source name="EBS Sensor: FIN PA Expenditure Item cost burden distributed flag is disabled but Burden Distributions Generated - Weekly" oms_version="2.50.2.0.0" configWarningSettings="0">
+    <Source name="EBS Sensor: MFG VCP How to deal with component changes on ECO's which were not Implemented but are being picked - Weekly" oms_version="2.50.2.0.0" configWarningSettings="0">
     <SourceType>database_sql</SourceType>
     <TargetTypes>
         <TargetType>omc_oracle_db_instance</TargetType>
         <TargetType>omc_oracle_pdb</TargetType>
     </TargetTypes>
-    <DisplayName>EBS Sensor: FIN PA Expenditure Item cost burden distributed flag is disabled but Burden Distributions Generated - Weekly</DisplayName>
-    <Description><![CDATA[Expenditure Item cost burden distributed flag is disabled but Burden Lines are already generated]]></Description>
+    <DisplayName>EBS Sensor: MFG VCP How to deal with component changes on ECO's which were not Implemented but are being picked - Weekly</DisplayName>
+    <Description><![CDATA[Find there is past bills of material where the implemented box on the component is not checked.  BOM components are collected in the ASCP planned.]]></Description>
     <IsSystem>0</IsSystem>
     <IsSecureContent>1</IsSecureContent>
     <Patterns>
         <DBPattern dateTimeField="entrytime" dateTimeColumns="entrytime">
         <SQLQuery>
-            <![CDATA[select 'ME$EBS_FIN_PA_BURD_CDL_GEN_FOR_COST_BUDERN_DISABLED_EI' sensor, to_timestamp(to_char(sysdate, 'YYYY-MM-DD hh24:mi:ss'), 'YYYY-MM-DD hh24:mi:ss') entrytime, 'cost_distributed_flag:' || s.cost_distributed_flag || ', cost_burden_distributed_flag:' || s.cost_burden_distributed_flag || ', project_number:' || s.project_number || ', task_number:' || s.task_number || ', ind_cost_dist_rejection_code:' || s.ind_cost_dist_rejection_code || ', expenditure_item_id:' || s.expenditure_item_id key_data FROM (SELECT ei.expenditure_item_id expenditure_item_id,         ei.cost_distributed_flag cost_distributed_flag,         ei.cost_burden_distributed_flag cost_burden_distributed_flag,         p.segment1 project_number,         t.task_number task_number,         ei.ind_cost_dist_rejection_code ind_cost_dist_rejection_code  FROM apps.pa_expenditure_items_all ei,       apps.pa_projects_all p,       apps.pa_project_types_all pt,       apps.pa_tasks t  WHERE nvl(ei.cost_burden_distributed_flag, 'Z') NOT IN ('Y','N')  AND   ei.project_id = p.project_id  AND   p.project_type = pt.project_type  AND   pt.total_burden_flag = 'Y'  AND   p.org_id = pt.org_id  AND   ei.system_linkage_function <> 'BTC'  AND   ei.task_id = t.task_id  AND   p.project_id = t.project_id  AND   EXISTS (          SELECT 1 FROM apps.pa_cost_distribution_lines_all cdl          WHERE cdl.expenditure_item_id = ei.expenditure_item_id          AND   cdl.project_id = ei.project_id          AND   cdl.task_id = ei.task_id          AND   line_type IN ('C','D'))  AND   ei.creation_date >= SYSDATE - 7  AND   rownum <= 5) s]]>
+            <![CDATA[select 'ME$EBS_MFG_VCP_EBS_MFG_VCP_MSCACA_SQL_1489347_1' sensor, to_timestamp(to_char(sysdate, 'YYYY-MM-DD hh24:mi:ss'), 'YYYY-MM-DD hh24:mi:ss') entrytime, 'organization_code:' || s.organization_code || ', ASSEMBLY:' || s.ASSEMBLY || ', Alternate_BOM_Designator:' || s.Alternate_BOM_Designator || ', COMPONENT:' || s.COMPONENT || ', ITEM_NUM:' || s.ITEM_NUM || ', component_sequence_id:' || s.component_sequence_id key_data FROM (select tabl.organization_code organization_code,          tabl.ASSEMBLY ASSEMBLY,          tabl.ALTERNATE_BOM_DESIGNATOR Alternate_BOM_Designator,          tabl.COMPONENT COMPONENT,          ITEM_NUM ITEM_NUM,         tabl.component_sequence_id component_sequence_id  from (  select mp.organization_code organization_code,          msi1.segment1 ASSEMBLY,          bsb.ALTERNATE_BOM_DESIGNATOR ALTERNATE_BOM_DESIGNATOR,          msi2.segment1 COMPONENT,          bcb.ITEM_NUM Item_Num,         bcb.component_sequence_id component_sequence_id  from apps.bom_components_b bcb,        apps.bom_structures_b bsb,        apps.mtl_system_items_b msi1,       apps.mtl_system_items_b msi2,        apps.mtl_parameters mp  where bcb.change_notice is not null  and bcb.EFFECTIVITY_DATE is not null  and bcb.IMPLEMENTATION_DATE is null  and bcb.DISABLE_DATE is null  and bcb.BILL_SEQUENCE_ID = bsb.BILL_SEQUENCE_ID  and bcb.COMPONENT_ITEM_ID = msi2.INVENTORY_ITEM_ID  and bsb.ORGANIZATION_ID = mp.ORGANIZATION_ID  and bsb.ASSEMBLY_ITEM_ID = msi1.INVENTORY_ITEM_ID  and bsb.ORGANIZATION_ID = msi1.ORGANIZATION_ID  and bsb.ORGANIZATION_ID = msi2.ORGANIZATION_ID) tabl) s]]>
         </SQLQuery>
         <IsInclude>1</IsInclude>
             <InUse>1</InUse>
