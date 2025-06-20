@@ -13,7 +13,6 @@ In this example we will get you started on the Oracle Cloud Infrastructure obser
 ![Out-of-Box Dashboard for OCI Audit Logs ](https://user-images.githubusercontent.com/80283985/153082162-662ac81b-9e85-483e-93ab-72d6a9cd560d.png)
 
 
-
 ## OCI Functions
 
 Note:
@@ -32,13 +31,16 @@ cd examples/oci-logging-analytics
 
 ## Contributing
 
-This project welcomes contributions from the community. Before submitting a pull
-request, see [CONTRIBUTING](./CONTRIBUTING.md) for details.
+This project welcomes contributions from the community. Before submitting a pull request, please [review our contribution guide](./CONTRIBUTING.md)
+
+## Security
+
+Please consult the [security guide](./SECURITY.md) for our responsible security vulnerability disclosure process
 
 ## License
 
 Copyright (c) 2021, 2022 Oracle and/or its affiliates.
-Released under the Universal Permissive License (UPL), Version 1.0.
+Released under the GNU GENERAL PUBLIC LICENSE Version 3, 29 June 2007.
 See [LICENSE](./LICENSE) for more details.
 
 [oci]: https://cloud.oracle.com/en_US/cloud-infrastructure
