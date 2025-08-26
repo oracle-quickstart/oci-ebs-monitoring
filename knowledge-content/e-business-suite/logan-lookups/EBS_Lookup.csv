@@ -7590,43 +7590,6 @@ FND_LOBS is a unique table that is used for both EBS temporary data (i.e. Export
 References:
 How To Manage, Reduce, and/or Purged The FND_LOBS Table? (Doc ID 1288149.1)
 FAQ - Performance Considerations For FND_LOBS (Doc ID 829235.1)",FND,Purge Consideration for FND LOBS Table to avoid abnormal growth,FAQ - Performance Considerations For FND_LOBS (Doc ID 829235.1),2,Oracle Concurrent Processing,PERFORMANC,PERFORMANCE,WEEK,SAT,System: Techstack,"Of all the tables that occupy very large amount of space within APPLSYSD and APPLSYSX tablespaces of Oracle Applications instances, FND_LOBS is usually one of the top 10. This is because, it stores all the attachments that have been uploaded to Oracle Applications. There is a LOB field within this table called FILE_DATA, the corresponding LOB segment (e.g., APPLSYS.SYS_LOB0000680397C00004$$) is where the actual attachment data is stored, and is usually very large.",EBS ATG,EBS - Component Tools
-ME$EBS_ATG_WF_MAILER_MISSING_INDEX,"SELECT
-    dummy dummyalias
-FROM
-    dual,
-    (
-        SELECT
-            1
-        FROM
-            dual
-        WHERE
-            NOT EXISTS (
-                SELECT
-                    index_name
-                FROM
-                    dba_indexes
-                WHERE
-                    index_name = 'WF_NOTIFICATION_OUT_N1'
-            )
-    )",733539.1,"In your System, Workflow Mailer Index WF_NOTIFICATION_OUT_N1  is missing , which will cause the performance issue, when the load on the Mailer is high
-
-Alerts along with Other Notifications Are Getting Piled Up In The Out Queue And Not Sending Emails (Doc ID 733539.1)
-
-To implement the solution, please execute the following steps:
-
-SOLUTION
-1. Stop the Workflow Mailer and Workflow Agent Listener Services.
-
-2. Create the Missing Index
-
-sqlplus applsys/<pwd>
-
-CREATE INDEX WF_NOTIFICATION_OUT_N1
-ON WF_NOTIFICATION_OUT(CORRID)
-STORAGE (INITIAL 1M NEXT 1M MINEXTENTS 1 MAXEXTENTS 2147483645 PCTINCREASE 0)
-TABLESPACE APPS_TS_QUEUES;
-
-3.  Start the Workflow Mailer and Workflow Agent Listener Services.",FND,Workflow Mailer WF NOTIFICATION OUT N1 Index is Missing,Alerts along with Other Notifications Are Getting Piled Up In The Out Queue And Not Sending Emails (Doc ID 733539.1),2,Oracle Workflow,JAVA MAILER,OUTBOUND,WEEK,SAT,System: Techstack,"Missing Index will cause the performance issue, when the load on the Workflow Mailer is high",EBS ATG,EBS - Workflow and Integrations
 ME$EBS_ATG_CT_INTERNAL_MANAGER_ICM_ACTUAL_TARGET_NOT_SAME,"SELECT
     concurrent_queue_name ConcurrentQueueName,
     running_processes RunningProcess,
@@ -9840,71 +9803,6 @@ FROM (
 CAUSE: Issue is caused due to data corruption in PA_COST_DISTRIBUTION_LINES_ALL table. COST_BURDEN_DISTRIBUTED_FLAG marked Y but no corresponding C and D lines generated.
 
 SOLUTION: A data fix will be required from Support.  If you would like to correct these lines with a data fix, please update the SR and Support will engage appropriately.",PA,Burden distributions missing for expendiutre items flagged as cost burden distributed,Burden Credit and Debit cost distribution lines are not generated for some expenditure items even though they are flagged as burden cost distributed,2,Oracle Project Costing,BURDEN,BURDEN,WEEK,SAT,Project to Profit,Burden credit and debit lines are missing for expenditure items causing incorrect balances and potential processing/accounting errors.,EBS Financials,EBS - Projects
-ME$EBS_ATG_WF_CLOUD_MAILER_IMAP_CONNECTION_SECURITY_INCORRECT,"SELECT
-    dummy testalias
-FROM
-    dual,
-    (
-        SELECT
-            COUNT(*) count_test
-        FROM
-            ( (
-                SELECT
-                    1
-                FROM
-                    dual
-                WHERE
-                    EXISTS (
-                        SELECT
-                            c.parameter_name,
-                            a.parameter_id,
-                            c.display_name,
-                            a.parameter_value
-                        FROM
-                            apps.fnd_svc_comp_param_vals a,
-                            apps.fnd_svc_comp_params_vl  c
-                        WHERE
-                                c.parameter_id = a.parameter_id
-                            AND a.component_id = 10006
-                            AND c.parameter_name ='INBOUND_SERVER' 
-                            AND a.parameter_value='outlook.office365.com' 
-                    )
-                UNION ALL
-                SELECT
-                    1
-                FROM
-                    dual
-                WHERE
-                    EXISTS (
-                        SELECT
-                            c.parameter_name,
-                            a.parameter_id,
-                            c.display_name,
-                            a.parameter_value
-                        FROM
-                            apps.fnd_svc_comp_param_vals a,
-                            apps.fnd_svc_comp_params_vl  c
-                        WHERE
-                                c.parameter_id = a.parameter_id
-                            AND a.component_id = 10006
-                            AND c.parameter_name='INBOUND_SECURE_PROTOCOL' 
-                            AND a.parameter_value != 'TLS'
-                    )
-            ) ) test_a
-        HAVING
-            COUNT(*) = 2
-    ) test_b
-WHERE
-    count_test = 2",2077434.1,"a. Log in to the Oracle Application Manager
-b. In the Navigate section Select ""Workflow Manager“
-c. Click on GO
-d. Click on Notification Mailer
-e. Click on ""Edit"" > Advanced
-f. Click ""Advanced""
-g. Click Next to ""Step 3 of 8""
-h. Enter Username/password for both Outbound and Inbound processing and set the 'Connection Security' to ""SSL/TLS"" for Inbound.
-i. Restart the mailer
-j. Retest the issue with fresh notification.",FND,Workflow Mailer IMAP Connection Security is Not Set Correctly for Office365,"""Connection Security"" for Workflow Mailer, if not set correctly, mailer will not work as expected like, it might be running, but will fail to process email",2,Oracle Workflow,JAVA MAILER,INBOUND,DAY,1,System: Techstack,"""Connection Security"" for the Workflow Mailer, if not set correctly, mailer will not work as expected like, it might be running, but will fail to process email.",EBS ATG,EBS - Workflow and Integrations
 ME$EBS_MFG_OM_BOOKED_SO_HEADERS_NONBOOKED_LINES_DETAILS,"select header_id header_id,
 booked_flag booked_flag,
 line_id line_id
@@ -10716,59 +10614,6 @@ ORDER BY
 
 IMPORTANT NOTE:
 There could be more transactions having this problem than reported in the Service Request due to the maximum threshold defined. So the recommendation is that you run the datafix (GDF) for all eligible affected transactions identified by the GDF select script.",SQLAP,Invoice with Accounting dates out of sync with the Subledger Tables,Out of Sync Accounting dates between the Invoicing transaction tables and the Accounting Events table.,2,Oracle Payables,ACCOUNTING,ACCINVENG,WEEK,SAT,Accounting to Financial Reports: Period Close,"Affected transactions may have incorrect details with accounting, reporting, or drilldown. Some transactions may prevent period close.",EBS Financials,EBS - Payables
-ME$EBS_ATG_WF_WF_MAILER_REPLYTO,"SELECT
-    dummy dummyalias
-FROM
-    dual,
-    (
-        SELECT
-            c.parameter_name  pn,
-            a.parameter_id    pi,
-            c.display_name    dn,
-            a.parameter_value pv
-        FROM
-            apps.fnd_svc_comp_param_vals a,
-            apps.fnd_svc_comp_params_vl  c,
-            apps.FND_SVC_COMPONENTS co
-        WHERE
-                c.parameter_id = a.parameter_id
-            AND c.parameter_name = 'REPLYTO'
-            AND a.parameter_value NOT LIKE '%@%'
-            and co.component_id = a.component_id
-            and co.component_type = 'WF_MAILER'
-            and co.component_status not in ('NOT_CONFIGURED')
-      and rownum < 2
-    )",743567.1,"Email Notifications are not Sent, and Mailer Log File Shows Error ""Replyto Must Be a Valid Email Address"" (Doc ID 743567.1)
-
-To implement the solution, please execute the following steps:
-
-1. Change the value of ""Reply-To Address"" parameter to a correctly formatted email address, for instance ""NoReplyTo@<domain>"", and Apply.
-a. Workflow Administrator Web Applications Responsibility>
-b. Workflow Manager>
-c. Notification Mailer ICON>    
-d. Workflow Mailer>
-e. Edit>
-f. Click on next until you find the section called ""Message Generation""
-g. Look for the Reply-to Address field and enter a valid email address
-
-2. Restart the Workflow Mailer
-
-3. Retest the issue with fresh email notification.
-
-Use this query to identify the problem component:
-SQL>
-SELECT co.component_name
-FROM
-    fnd_svc_comp_param_vals a,
-    fnd_svc_comp_params_vl  c,
-    FND_SVC_COMPONENTS co
-WHERE
-        c.parameter_id = a.parameter_id
-    AND c.parameter_name = 'REPLYTO'
-    AND a.parameter_value NOT LIKE '%@%'
-    and co.component_id = a.component_id
-    and co.component_type = 'WF_MAILER'
-    and co.component_status not in ('NOT_CONFIGURED');",FND,Workflow Mailer Parameter ReplyTo is Not Set Properly due to this all emails will fail,Workflow Mailer Parameter ReplyTo is not set properly and this will make all the emails fail,2,Oracle Workflow,JAVA MAILER,OUTBOUND,DAY,1,System: Techstack,All emails will fail if the Replyto email address is not set in a proper format.,EBS ATG,EBS - Workflow and Integrations
 ME$EBS_MFG_PM_GME_PENDING_RESOURCE_TXN,"select grti.interface_id INTERFACE_ID ,grti.process_status PROCESS_STATUS, gie.MESSAGE_NAME MESSAGE_NAME, gie.MESSAGE_TYPE MESSAGE_TYPE, gie.MESSAGE_TEXT MESSAGE_TEXT,
 grti.batch_no BATCH_NO
 from apps.gme_resource_txns_interface grti, apps.gme_intf_errors gie
@@ -12084,53 +11929,6 @@ and rownum<= 5
 Please run the Transaction Analyzer from Doc Id  2058269.1, using the ""Key values:"" in previous update as parameters.
 
 Upload the transaction analyzer output to the SR for the engineer to review.",AR,Transaction Events in error,Identified transaction events in error.,2,Oracle Receivables,DATA,POST-RECON-DATA,WEEK,SAT,Accounting to Financial Reports: Period Close,Transaction events in error will not successfully create accounting or transfer to GL. Such events will prevent the period from closing.,EBS Financials,EBS - Receivables
-ME$EBS_ATG_WF_SYSADMIN_WFERROR_LOGIN_ISSUE,"SELECT
-    dummy dummyalias
-FROM
-    dual,
-    (
-        SELECT
-            COUNT(*)
-        FROM
-            apps.wf_notifications
-        WHERE
-                message_type = 'WFERROR'
-            AND recipient_role = 'SYSADMIN'
-        HAVING
-            COUNT(*) > 50000
-    )",2232781.1,"How to Purge WFERROR (System: Error) Workflow Items? (Doc ID 804622.1)
-Sysadmin User Login Is Hanging or Takes A Lot Of Time (Doc ID 2232781.1)
-
-1. Abort items using below scripts ,connect as APPS and run the below to end-date all open WFERROR notifications:
-
-DECLARE
-     CURSOR Ab_wf IS
-     SELECT item_key
-        FROM wf_items
-     WHERE item_type = 'WFERROR'
-          AND end_date is null
-          AND begin_date <= SYSDATE-7';
-
-BEGIN
-         FOR i IN Ab_wf LOOP
-               WF_ENGINE.abortProcess('WFERROR', i.item_key);
-         END LOOP;
-
-COMMIT;
-END;
-
-2.  When point 1 above is completed please execute ""Purge Obsolete Workflow Runtime Data"" concurrent request having Age parameter set to 0 for item type System: Error.
-
-Concurrent request should be executed with age 0 as end_date of the item will be set with the date when the abort was executed.
-Example:
- Item Type: System: Error
- Age: 0
- Persistence Type: Temporary
- Core Workflows Only: N
- Commit Frequency: 500
- Signed Notifications: N
- 
- Null for all other parameters.",FND,Sysadmin User Login Is Hanging or Takes A Lot Of Time,In your system there are high volume of WFERROR notification under SYSADMIN user than can cause issue's for SYSADMIN login.,2,Oracle Workflow,ADMIN,FWK_WL,WEEK,SAT,System: Techstack,"Due to this issue, SYSADMIN user unable to login to application to administrative task",EBS ATG,EBS - Workflow and Integrations
 ME$EBS_ATG_WF_LOG_LEVEL_STATEMENT_ENABLED,"  SELECT
     dummy dummyalias
 FROM
@@ -12362,47 +12160,6 @@ FROM
             COUNT(*) > 0
     )
 where rownum < 1000",2425620.1,"From Cost Management, Run Create Accounting for Receiving process category or from Purchasing, Run Create Accounting - Receiving",PO,Found unprocessed receiving events for the last 30 days,Found unprocessed receiving events for the last 30 days,2,Oracle Purchasing,ACCOUNTING,ACCRUAL,MONTH,LAST,P2P: Purchasing,Impact period close,EBS MFG,EBS - Procurement
-ME$EBS_ATG_WF_ORPHAN_NOTIFICATIONS_TO_PURGE,"SELECT
-    dummy dummyalias
-FROM
-    dual,
-    (
-        SELECT
-            COUNT(*)
-        FROM
-            apps.wf_notifications wn
-        WHERE
-            NOT EXISTS (
-                SELECT
-                    NULL
-                FROM
-                    apps.wf_item_activity_statuses wias
-                WHERE
-                    wias.notification_id = wn.group_id
-            )
-                AND NOT EXISTS (
-                SELECT
-                    NULL
-                FROM
-                    apps.wf_item_activity_statuses_h wiash
-                WHERE
-                    wiash.notification_id = wn.group_id
-            )
-                AND wn.end_date IS NULL
-        HAVING
-            COUNT(*) > 50000
-    )",2378812.1,"How to purge orphan notifications. wfntfprg.sql script purges all the Notifications whose Item Status Information and Design Information are unavailable.
-
-USAGE
-sqlplus apps/apps @wfntfprg.sql <no. of days>
-
-no. of days = Purgeable notifications older than the no. of days specifiedwill be purged.
-
-EXAMPLE
-
-sqlplus apps/appsPassword
-
-SQL> @$FND_TOP/sql/wfntfprg.sql 10",FND,Orphan Notification that Needs to be Purged,50+K Notifications whose Item Status Information and Design Information are unavailable WF_ITEMS master table and only exists in WF_NOTIFICATIONS table.,2,Oracle Workflow,PURGE,NOPURGE,WEEK,MON,System: Techstack,Notifications whose Item Status Information and Design Information are unavailable in WF_ITEMS master table and but they still exists in WF_NOTIFICATIONS table.,EBS ATG,EBS - Workflow and Integrations
 ME$EBS_FIN_AP_AP_INCORRECT_CHECKS,"SELECT
     check_id check_id
 FROM
@@ -12469,80 +12226,6 @@ ORDER BY
 
 IMPORTANT NOTE:
 There could be more transactions having this problem than reported in the Service Request due to the maximum threshold defined. So the recommendation is that you run the datafix (GDF) for all eligible affected transactions identified by the GDF select script.",SQLAP,Checks with no corresponding invoice payment records,1. Detects the checks which are not paying any invoice and have a complementary check with same check number,2,Oracle Payables,PAYMENTS,PPRINV,WEEK,SAT,P2P: Payables and Payments,Affected  payments  may have  no corresponding invoice payment records,EBS Financials,EBS - Payables
-ME$EBS_ATG_WF_CLOUD_MAILER_SMTP_CONNECTION_SECURITY_INCORRECT,"SELECT
-    dummy dummyalias
-FROM
-    dual,
-    (
-        SELECT
-            COUNT(*) count_test
-        FROM
-            ( (
-                SELECT
-                    1
-                FROM
-                    dual
-                WHERE
-                    EXISTS (
-                        SELECT
-                            c.parameter_name,
-                            a.parameter_id,
-                            c.display_name,
-                            a.parameter_value
-                        FROM
-                            apps.fnd_svc_comp_param_vals a,
-                            apps.fnd_svc_comp_params_vl  c
-                        WHERE
-                                c.parameter_id = a.parameter_id
-                            AND a.component_id = 10006
-                            AND c.parameter_name ='OUTBOUND_SERVER' 
-                            AND a.parameter_value='smtp.office365.com' 
-                    )
-                UNION ALL
-                SELECT
-                    1
-                FROM
-                    dual
-                WHERE
-                    EXISTS (
-                        SELECT
-                            c.parameter_name,
-                            a.parameter_id,
-                            c.display_name,
-                            a.parameter_value
-                        FROM
-                            apps.fnd_svc_comp_param_vals a,
-                            apps.fnd_svc_comp_params_vl  c
-                        WHERE
-                                c.parameter_id = a.parameter_id
-                            AND a.component_id = 10006
-                            AND c.parameter_name='OUTBOUND_SECURE_PROTOCOL' 
-                            AND a.parameter_value != 'STARTTLS'
-                    )
-            ) ) test_a
-        HAVING
-            COUNT(*) = 2
-    ) test_b
-WHERE
-    count_test = 2",2077434.1,"Problem
-
-When workflow uses cloud e-mail server Office365, the protocol has to be set to STARTTLS  (TLS enabled) for outbound; for inbound the option is SSL/TLS.
-
-Solution
-a. Log in to the Oracle Application Manager
-b. In the Navigate section Select ""Workflow Manager“
-c. Click on GO
-d. Click on Notification Mailer
-e. Click on ""Edit"" > Advanced
-f. Click ""Advanced""
-g. Click Next to ""Step 3 of 8""
-h. Enter Username/password for both Outbound and Inbound processing and set the 'Connection Security' to STARTTLS for Outbound.
-i. Restart the mailer
-j. Retest the issue with fresh notification.
-
-Refer to:
-- Doc id 2868023.1, and 
-- Doc id 2077434.1.",FND,Workflow Mailer SMTP Connection Security is Not Set Correctly for Office365,"""Connection Security"" for Workflow Mailer, if not set correctly, mailer will not work as expected like, it might be running, but will fail to send email",2,Oracle Workflow,JAVA MAILER,OUTBOUND,WEEK,SAT,System: Techstack,"""Connection Security"" for the Workflow Mailer, if not set correctly, mailer will not work as expected like, it might be running, but will fail to send email.",EBS ATG,EBS - Workflow and Integrations
 ME$EBS_ATG_CT_OPPMANAGER_ACTUAL_TARGET_NOT_SAME,"SELECT
     concurrent_queue_name ConcurrentQueueName,
     running_processes RunningProcess,
@@ -13641,41 +13324,6 @@ SOLUTION: Please follow solution in the Note to fix the issue: Note 361178.1 Pos
 
 If you would like assistance for further diagnosis, please update the SR and Support will engage appropriately.",GMF,Wrong PPV Setup in OPM Cost Component Class,"'Exclude from Purchase Price Variance Calculation' is flaged in OPM 'Cost Component Classes', this leads the comp ignored by OPM Accounting Preprocessor",2,Oracle Process Manufacturing Financials,ACTUALCOST,ACTUALCOST,MONTH,LAST,Process Manufacturing,"'Purchase Price Variance Calculation' setup as 'Exclude from Purchase Price Variance Calculation' in OPM 'Cost Component Classes' form:
 This leads the Cost Components ignored by the subledger accounting process",EBS MFG,EBS - Process Manufacturing
-ME$EBS_ATG_WF_MISSING_RESPONSIBILITIES_AP_WEB_PROXY_ASSIGN_PKG,"SELECT
-    dummy dummyalias
-FROM
-    dual,
-    (
-        SELECT
-            status,
-            rule_function
-        FROM
-            apps.wf_event_subscriptions
-        WHERE
-                status = 'ENABLED'
-            AND rule_function = 'AP_WEB_PROXY_ASSIGN_PKG.proxy_assignments'
-            AND event_filter_guid = (
-                SELECT
-                    guid
-                FROM
-                    apps.wf_events
-                WHERE
-                    name = 'oracle.apps.fnd.wf.ds.userRole.updated'
-            )
-    )",433473.1,"How To Fix Missing Responsibilities For A User (Doc ID 429852.1)
-Unable To Activate a User Responsibility Assignment that Existed Before Upgrade (Doc ID 433473.1)
-
-1. Login to E-Business as the SYSADMIN user using the Workflow Administrator responsibility and navigate to Workflow Administrator Web Application > Business Event.
-
-Search for oracle.apps.fnd.wf.ds.userRole.updated. Then click on clock symbol under the Subscription column.
-
-Use the pencil beside the AP_WEB_PROXY_ASSIGN_PKG.proxy_assignments subscription to access its definition and disable it.
-
-2. Shutdown and restart the Workflow Agent Listener Service.
-
-3. Test removing the end_date from the responsibility again.  The 'WF_ROLE_HIERARCHY.Aggregate_User_Roles_RF' subscription will run as a part of processing the ""oracle.apps.fnd.wf.ds.userRole.updated"" event through the WF_DEFERRED or WF_JAVA_DEFERRED queue.
-
-4. Run the Workflow Directory Services User/Role Validation concurrent request to clean up responsibilities that were already affected by the issue. The fix will only affect future responsibilities.",FND,Unable To Activate a User Responsibility Assignment that Existed Before Upgrade,Responsibilities are still missing after the end_date has been removed.,2,Oracle Workflow,DIRECTORY,MISSING_RESP,WEEK,SAT,System: Techstack,"Due to this issue, users unable to access the responsibility assigned to them causing delay in business process",EBS ATG,EBS - Workflow and Integrations
 ME$EBS_FIN_AR_TRX_EVENTS_IN_ERROR_95325,"select user_resp USER_RESP,
 org_id ORG_ID,
 trx_number TRX_NUMBER,
@@ -14019,42 +13667,6 @@ WHERE
 System Administrator --> Concurrent -->Manager --> Administer form and check the Standard Concurrent Manager Actual and Target Process are Equal.
 
 If not Equal, please restart the managers to fix any issue's.",FND,Standard Concurrent Manager Actual and Target Process are Not Equal,"If there Actual and Target process for Standard managers are not same, than it indicates a issue with manager and will cause issue in concurrent processing",2,Oracle Concurrent Processing,MANAGER,MANAGER,DAY,1,System: Techstack,"If there Actual and Target process for Standard managers are not same, than it indicates a issue with manager and will cause issue in concurrent request processing hampering normal business.",EBS ATG,EBS - Component Tools
-ME$EBS_ATG_WF_WF_DEFERRED_N1_INDEX_MISSING,"SELECT
-    dummy dummyalias
-FROM
-    dual,
-    (
-        SELECT
-            1
-        FROM
-            dual
-        WHERE
-            NOT EXISTS (
-                SELECT
-                    index_name
-                FROM
-                    dba_indexes
-                WHERE
-                    index_name = 'WF_DEFERRED_N1'
-            )
-    )",733539.1,"In your System, Workflow Deferred Agent Listener Index WF_DEFERRED_N1  is missing , which will cause the performance issue, when the load on the Deferred Agent Listener is high
-
-
-To implement the solution, please execute the following steps:
-
-SOLUTION
-1. Stop the Workflow Mailer and Workflow Agent Listener Services.
-
-2. Create the Missing Index
-
-sqlplus applsys/<pwd>
-
-CREATE INDEX WF_DEFERRED_N1 
-ON WF_DEFERRED(CORRID)
-STORAGE (INITIAL 1M NEXT 1M MINEXTENTS 1 MAXEXTENTS 2147483645 PCTINCREASE 0)
-TABLESPACE APPS_TS_QUEUES;
-
-3.  Start the Workflow Mailer and Workflow Agent Listener Services.",FND,Workflow Deferred Agent Listener WF DEFERRED N1 Index is Missing,"Missing Index will cause the performance issue, when the load on the Workflow Deferred Agent Listener is high",2,Oracle Workflow,JAVA MAILER,OUTBOUND,WEEK,SAT,System: Techstack,"Missing Index will cause the performance issue, when the load on the Workflow Deferred Agent Listener is high",EBS ATG,EBS - Workflow and Integrations
 ME$EBS_HCM_HR_INVALID_ENROLLMENT_RATE_ROWS,"SELECT pen.person_id person_id, prv.prtt_enrt_rslt_id prtt_enrt_rslt_id, pen.prtt_enrt_rslt_stat_cd prtt_enrt_rslt_stat_cd, prtt_rt_val_id prtt_rt_val_id, prv.rt_strt_dt rt_strt_dt, prv.rt_end_dt rt_end_dt
 FROM apps.ben_prtt_enrt_rslt_f pen,
      apps.ben_prtt_rt_val prv
@@ -14998,26 +14610,6 @@ and gi.code_combination_id = gcc.code_combination_id(+)
 and gi.status like '%EM30%'
 and rownum < 2) a",943582.1,"Apply the solution specific to your issue from Doc ID 943582.1
 Then retest the issue",SQLGL,Journal Import Ends With Error EM30,Journal Import Ends With Error EM30 - This balancing segment value is not valid for this ledger.,3,Oracle General Ledger,JE_IMPORT,JIMP,MONTH,LAST,Accounting to Financial Reports: Reporting,"Accounting transactions are originated as a result of normal business activities in Financial and Manufacturing modules of Oracle Applications, as well as in external modules. In order to register those transactions into the General Ledger, a process called Journal Import must complete successfully. Having rows in GL_INTERFACE table with error status may impact Period Close.",EBS Financials,EBS - Financial Control
-ME$EBS_ATG_WF_ACCOUNT_NAME_AND_TEST_ADDRESS_SAME,"select a.parameter_value SameAddress
-FROM   apps.fnd_svc_comp_param_vals a,
-       apps.fnd_svc_comp_params_vl c
-WHERE  c.parameter_id = a.parameter_id
-AND    a.component_id = 10006 
-AND    c.parameter_name IN ('TEST_ADDRESS')
-AND    a.parameter_value =  (select a.parameter_value
-FROM   apps.fnd_svc_comp_param_vals a,
-       apps.fnd_svc_comp_params_vl c
-WHERE  c.parameter_id = a.parameter_id
-AND    a.component_id = 10006 
-AND    c.parameter_name IN ('REPLYTO') )",2400990.1,"a. Log in to the Oracle Application Manager
-b. In the Navigate section Select ""Workflow Manager“
-c. Click on GO
-d. Click on Notification Mailer
-e. Click on ""Edit"" > Advanced
-f. Click ""Advanced""
-g. Click on ""Test Address"" 
-h. Change the ""Test Address""  other than the Mailer Account name
-i. Restart the mailer",FND,Workflow Mailer Configured with Same Account and Test Adrdress,"If the Mailer is configured with same Account and Test_address, it will stop with error.",2,Oracle Workflow,JAVA MAILER,OUTBOUND,WEEK,SAT,System: Techstack,"If the Mailer is configured with same Account and Test_address, it will stop with error.",EBS ATG,EBS - Workflow and Integrations
 ME$EBS_ATG_CT_FND_CONCURRENT_REQUESTS_ABOVE_500K,"SELECT
     dummy dummyalias
 FROM
@@ -17951,73 +17543,6 @@ and owner = 'APPLSYS';
 10. Start Workflow Agent Listeners and Mailers in OAM
 
 11. Check if Mailer is now sending email notifications as expected.",FND,Notification Emails are not Getting Sent and Mailer Log Shows ORA 24010,Notification Emails are not Getting Sent and Mailer Log Shows ORA-24010: QUEUE APPLSYS.WF_NOTIFICATION_OUT does not exist (Doc ID 968683.1),2,Oracle Workflow,JAVA MAILER,OUTBOUND,DAY,1,System: Techstack,All emails will fail because of the missing Mailer queue WF_NOTIFICATION_OUT,EBS ATG,EBS - Workflow and Integrations
-ME$EBS_ATG_WF_MAILER_CTX_FILE_SMTPHOST_NOT_SET,"SELECT
-    dummy dummyalias
-FROM
-    dual,
-    (
-        SELECT
-            1
-        FROM
-            dual
-        WHERE
-            EXISTS (
-                SELECT
-                    1
-                FROM
-                    apps.fnd_oam_context_files a
-                WHERE
-                    status NOT IN ( 'H' )
-                    AND name NOT IN ( 'TEMPLATE', 'METADATA' )
-                    AND ( status IS NULL
-                          OR status != 'H' )
-                    AND ctx_type = 'A'
-                    AND a.last_synchronized = (
-                        SELECT
-                            MAX(last_synchronized)
-                        FROM
-                            apps.fnd_oam_context_files b
-                        WHERE
-                                a.node_name = b.node_name
-                            AND b.name NOT IN ( 'TEMPLATE', 'METADATA' )
-                            AND a.ctx_type = b.ctx_type
-                    )
-                    AND extractvalue(xmltype(text), '/oa_context/oa_system/oa_smtp_server/hostname[@oa_var=""s_smtphost""]') = (
-                        SELECT
-                            nvl(substr(a.parameter_value, 0, instr(a.parameter_value, '.') - 1), a.parameter_value) output
-                        FROM
-                            apps.fnd_svc_comp_param_vals a,
-                            apps.fnd_svc_comp_params_vl  c
-                        WHERE
-                                c.parameter_id = a.parameter_id
-                            AND a.component_id = 10006
-                            AND c.parameter_name = 'OUTBOUND_SERVER'
-                    )
-            )
-    )",1565672.1,"Workflow Notification Mailer Not Starting After Running AutoConfig With Errors: Unable to make a network connection OR java.lang.RuntimeException: Connection refused (Doc ID 1565672.1)
-
-SOLUTION
-1. AutoConfig can modify Workflow Mailer related settings through the following context variables:
-
-s_smtphost: SMTP Server Host.
-s_smtpdomainname: Fully Qualified Domain Name for the Email Server.
-s_javamailer_imaphost: Oracle Workflow Java Mailer IMAP Host.
-s_javamailer_imapdomainname: Oracle Workflow Java Mailer domain.
-s_wf_admin_role: Role name of the Oracle Workflow Administrator.
-s_javamailer_reply_to: Oracle Workflow Java Mailer IMAP ReplyTo Address.
-s_javamailer_imap_user: Oracle Workflow Java Mailer IMAP User Name.
-s_javamailer_outbound_user: Oracle Workflow Java Mailer User Name to Authenticate Oracle Workflow Mailer against SMTP Server
-
-Please review the current settings of the above variables in the application context file, and set them properly, then re-run AutoConfig, and retest the issue.  To Avoid this issue happening again in future ie whenever maintenance activity like autoconfig,patching,upgrade etc,please update below context parameter with correct SMTP server name on all the application node context file.In 11i the context file will be $APPL_TOP/admin/<SID>_hostname.xml and in R12 $INST_TOP/appl/admin/<SID>_hostname.xml.
-
-2. If the SMTP (Outbound) Server name in the mailer configuration page is incorrect, please correct SMTP servername with the steps below and retest the issue:
-
-1. Go into Oracle Application Manager as the SYSADMIN user.
-2. In the upper right corner of the screen next to ""Navigate to"", please select ""Workflow Manager"" from the drop down and select ""Go"".
-3. Then in the lower left corner of the screen under Related Links, select ""Service Components"".
-4. Select ""Workflow Notification Mailer"" and click on ""Edit"".
-5. Enter the correct Outbound(SMTP) Server name and Apply the changes.
-6. Bounce the mailer and retest.",FND,Workflow Mailer Goes Down After Autoconfig Run,Workflow Mailer Goes Down After Autoconfig Run due to CONTEXT_FILE parameter s_smtphost to the application node name.,2,Oracle Workflow,JAVA MAILER,OUTBOUND,WEEK,MON,System: Techstack,"Due to this , Mailer stops and Business user's not receive email notifications causing delay in approvals.",EBS ATG,EBS - Workflow and Integrations
 ME$EBS_MFG_DM_SLA-CST-UNPROCESSED-EVENTS_2,"SELECT LEDGER_ID LEDGER_ID,
 LEDGER_NAME LEDGER_NAME,
 PROCESS_STATUS PROCESS_STATUS,
@@ -18367,90 +17892,6 @@ A data fix will be required from Support.  If you would like to correct this iss
 KNOWLEDGE MANAGEMENT 
 =====================
 Monitoring Services: Latest Open Period In GL_LEDGERS Is Incorrect (Doc ID 2540305.1)",SQLGL,Latest open period in GL LEDGERS is incorrect,Latest open period associated with Ledger is incorrect and is not same as the actual latest open period,2,Oracle General Ledger,SETUP,CALD,WEEK,SAT,Accounting to Financial Reports: Period Close,"By having latest open period in GL Ledgers different from the actual latest open period, opening of periods will get impacted. Can also cause balance corruption.",EBS Financials,EBS - Financial Control
-ME$EBS_ATG_WF_MAILER_OFFICE365_TLS1.2_SUPPORT_PREREQ,"SELECT
-    dummy dummyalias
-FROM
-    dual,
-    (
-        SELECT
-            COUNT(*)
-        FROM
-            ( (
-                SELECT
-                    1
-                FROM
-                    dual
-                WHERE
-                    EXISTS (
-                        SELECT
-                            c.parameter_name,
-                            a.parameter_id,
-                            c.display_name,
-                            a.parameter_value
-                        FROM
-                            apps.fnd_svc_comp_param_vals a,
-                            apps.fnd_svc_comp_params_vl  c
-                        WHERE
-                                c.parameter_id = a.parameter_id
-                            AND a.component_id = 10006
-                            AND c.parameter_name IN ( 'OUTBOUND_SERVER', 'INBOUND_SERVER' )
-                            AND a.parameter_value IN ( 'smtp.office365.com', 'outlook.office365.com' )
-                    )
-                UNION ALL
-                SELECT
-                    1
-                FROM
-                    dual
-                WHERE
-                    EXISTS (
-                        SELECT
-                            c.parameter_name,
-                            a.parameter_id,
-                            c.display_name,
-                            a.parameter_value
-                        FROM
-                            apps.fnd_svc_comp_param_vals a,
-                            apps.fnd_svc_comp_params_vl  c
-                        WHERE
-                                c.parameter_id = a.parameter_id
-                            AND a.component_id = 10006
-                            AND c.parameter_name IN ( 'JAVA_MAIL_API_VERSION' )
-                            AND a.parameter_value != '1.5.4'
-                    )
-            ) ) test_a
-        HAVING
-            COUNT(*) = 2
-    )",2816784.1,"Workflow Mailer Down and Gives Error of ""Unable to connect to the mail account. Check the host, user name, password and connection security"" due to Office365 Started Desupporting TLS1.0,TLS1.1 Connection to their Cloud Email Servers (Doc ID 2816784.1)
-
-Please implement the below Solution in a Test instance first and than migrate it to other environments.
-
-1. Upgrade JDK version to minimum 1.7.0-131 or above.
-
-For 12.2: Using the Latest JDK 7.0 Update with Oracle E-Business Suite Release 12.2 Note 1530033.1
-For 12.1: Using JDK 7.0 Latest Update with Oracle E-Business Suite Release 12.0 and 12.1 Note 1467892.1
-
-2. Apply the following patches to upgrade the JavaMail API to 1.5.4
-
-For 12.2
-Patch 22323006 : SU Patch [DI8E]: UPDATE JAVAMAIL API LIBRARY VERSION TO 1.5.4 WITHIN WLS 10.3.6
-Patch 29607457 : NEED HIGHER VERSION OF MAIL.JAR IN WEB TIER FOR IEM PRODUCT IN 12.2.8 & 12.2.9
-
-For 12.1.3
-Patch 22322938 : UPDATE JAVAMAIL API LIBRARY VERSION TO 1.5.4 WITHIN AS 10.1.3.5
-Patch 27881758: 1OFF:12.1.3:NEED TO CONFIRM MAILER CAN CONNECT TO OUTLOOK.OFFICE365.COM WITH TLS1.2
-
-Note:
-This step is applicable only when JavaMail API Version is less than 1.5.4. You can check the JavaMail API version from the smtp2.log or imap2.log run as per test given in the symptoms section, at the start of the log file like
-DEBUG: setDebug: JavaMail version 1.4.3
-or
-DEBUG: setDebug: JavaMail version 1.5.4
-3. Run ADADMIN to regenerate the jar files.
-
-4. Run autoconfig on all application nodes.
-
-5. Restart the application service and retest the issue.",FND,Workflow Mailer Goes Down a due to Office365 Desupporting TLS1 0 and TLS1 1,"Workflow Mailer Down a due to Office365 Started Desupporting TLS1.0,TLS1.1 Connection to their Cloud Email Servers (Doc ID 2816784.1)",4,Oracle Workflow,JAVA MAILER,OUTBOUND,WEEK,SAT,System: Techstack,"Due to this issue, users unable to receive the email and this is delaying approval process.
-2022-MAR-15: discussed and agreed that this is not a good monitor candidate as there is a root cause fix which once it is applied, issue won't happen again, ie, not a recurring issue. Setting to sev 4. Andres.
-2022-SEP-22: per Simona input in monitors call, setup checks are good to be included as monitor. Andres",EBS ATG,EBS - Workflow and Integrations
 ME$EBS_FIN_GL_JOURNAL_IMPORT_EM01,"select
 a.status status
 , a.ledger_id ledger_id
@@ -20220,41 +19661,6 @@ Notes:
 a) The item type definition has been defined as temporary or its persistence days have expired.
 b) The activities are complete or the notification is closed and have reached their given end date.
 2. All should have an end date.",FND,There are no Purge Obsolete Workflow Runtime Data Program Scheduled to Run,Purging Oracle Workflow tables of obsolete workflow runtime information for completed workflow processes is a required regular maintenance task.,2,Oracle Workflow,PURGE,PERF,WEEK,SAT,System: Techstack,"Due to this issue, performance issue's will be seen when running the ""Workflow Background Process"" program causing delay in business process.",EBS ATG,EBS - Workflow and Integrations
-ME$EBS_ATG_WF_HIGH_VOLUME_ADHOC_ROLES,"select dummy dummyalias
-FROM dual
-where exists
- (select 1 from  apps.wf_user_roles
-    WHERE role_name <> user_name
-    GROUP BY user_name
-    HAVING COUNT(*) > 10000
-    )",2241277.1,"R12 E-Business Suite User Login Fails Intermittently With HTTP 404 Errors, Or Other Random Login Failures Occur With OACore Errors 'CacheFullException: J2EE JOC-017 The Cache Is Full' And 'CacheInternal.000DEFAULT_CONTEXT$$> <BEA-000000>' (Doc ID 2241277.1)
-
-CAUSE
-There are adhoc roles created by every functional product area (Payables, Receivables, etc) to send emails.
-
-The functional product code does not end date these adhoc roles, and they remain active which prevents the roles from being purged.
-
-For example the following query may show users with over 1,000 roles, and some users with 100+ roles.
-
-select user_name, count(*) from wf_user_roles
-where role_name <> user_name
-group by user_name
-order by 2; 
-SOLUTION
-To resolve the issue test the following steps in a development instance and then migrate accordingly:
-
-1. Test the solution provided in the following document to end date the Ad-Hoc roles:
-
-Note: 373675.1 - How to Purge Adhoc Roles? (Doc ID 373675.1)
-
-2. Purge the end dated Adhoc Roles present in the tables WF_LOCAL_ROLES,WF_LOCAL_USER_ROLES, and WF_USER_ROLE_ASSIGNMENTS.
-
-    Note: An SR can be created with the Workflow team for additional assistance with troubleshooting or removing these roles.
-
-3. Retest the login flow under user load and confirm the HTTP 404 errors no longer occur.
-
-Note:
-The API to Purge ADHOC roles will purge only End Date ADHOC roles.",FND,High number of ADHOC roles creating login issue and hanging the OACORE server,"R12 E-Business Suite User Login Fails Intermittently With HTTP 404 Errors, Or Other Random Login Failures Occur With OACore Errors(Doc ID 2241277.1)",2,Oracle Workflow,PURGE,PERF,WEEK,MON:SAT,System: Techstack,"Due to this issue, ADHOC roles creating login issue and hanging the OACORE server.",EBS ATG,EBS - Workflow and Integrations
 ME$EBS_FIN_GL_BALANCES_1,"select a.ledger_id ledger_id, a.period period_name,
 a.currency currency, a.end_dr total_debit, a.end_cr total_credit
 from (SELECT gl.ledger_id ledger_id
@@ -20457,72 +19863,6 @@ Task cannot be updated to become a top task
 CAUSE: WBS Level at pa_tasks and pa_proj_elements are not same for the same task number.
 
 SOLUTION: A data fix will be required from Support.  If you would like to correct these lines with a data fix, please update the SR and Support will engage appropriately.",PA,Task data corrupted in Workplan tables WBS level outline number and parent child relations,The shared workplan structure does not match the financial structure hierarchy data and as a result progress cannot be collected/monitored.,2,Oracle Project Planning and Control,WORKPLAN,WORKPLAN,WEEK,SAT,Project to Profit,As the tasks data are corrupted in the workplan users are not able to monitor the progress.,EBS Financials,EBS - Projects
-ME$EBS_ATG_WF_AMW_VIOLATION_PVT,"SELECT
-    dummy dummyalias
-FROM
-    dual,
-    (
-        SELECT
-            *
-        FROM
-            apps.wf_event_subscriptions
-        WHERE
-            event_filter_guid IN (
-                SELECT
-                    guid
-                FROM
-                    apps.wf_events
-                WHERE
-                    name = 'oracle.apps.fnd.umx.requestapproved'
-            )
-            AND status = 'ENABLED'
-    )",1633588.1,"Event oracle.apps.fnd.umx.requestapproved References Non-existent Package AMW_VIOLATION_PVT (Doc ID 1633588.1)
-
-Solution
-+++++++
-Disable the ""AMW_VIOLATION_PVT.Do_On_Role_Assigned"" Rule function from the Subscription Event ""oracle.apps.fnd.umx.requestapproved"" as follows:
-
-1. Access the Workflow Administrator Web Application responsibility.
-
-2. Select Administrator Workflow.
-
-3. Navigate: Business Events > oracle.apps.fnd.umx.requestapproved  > Go.
-
-4. Disable the event and re-test",FND,Event oracle apps fnd umx requestapproved References Non existent Package AMW VIOLATION PVT,Event oracle.apps.fnd.umx.requestapproved References Non-existent Package AMW_VIOLATION_PVT (Doc ID 1633588.1),2,Oracle Workflow,EVENTS,EVENTS-PLSQL,WEEK,SAT,System: Techstack,"Processing certain Workflows that utilize ""oracle.apps.fnd.umx.requestapproved"" event generates error due to reference of non-existent rule function- AMW_VIOLATION_PVT.Do_On_Role_Assigned.",EBS ATG,EBS - Workflow and Integrations
-ME$EBS_ATG_WF_SENDNOTIFICATION_2328808.1,"SELECT
-    dummy dummyalias
-FROM
-    dual,
-    (
-        SELECT
-            *
-        FROM
-            apps.wf_event_subscriptions
-        WHERE
-            event_filter_guid IN (
-                SELECT
-                    guid
-                FROM
-                    apps.wf_events
-                WHERE
-                    name = 'oracle.apps.wf.notification.send.group'
-            )
-            AND rule_function = 'wf_xml.SendNotification'
-            AND status = 'ENABLED'
-    )",2328808.1,"JTF_APPR Workflow Error""component 'SENDNOTIFICATION' must be declared"" When Approving User After Upgrade From 11.5.10 To 12.2.6 (Doc ID 2328808.1)
-
-Solution
-+++++++
-Disable the wf_xml.sendnotification function from the event oracle.apps.wf.notification.send.group event
-
-1. Log in as the Sysadmin user
-2. Select Workflow Administrator Web Applications responsibility
-3. Select Administrator Workflow
-4. Select Business Events
-5. Enter in oracle.apps.wf.notification.send.group and click Go
-6. Click on Subscriptions icon
-7. For the subscription with rule function wf_xml.SendNotification, click Edit icon
-8. Change status to Disabled and save",FND,JTF APPR Workflow Error SENDNOTIFICATION must be declared When Approving User,"JTF_APPR Workflow Error""component 'SENDNOTIFICATION' must be declared"" When Approving User After Upgrade From 11.5.10 To 12.2.6 (Doc ID 2328808.1)",2,Oracle Workflow,EVENTS,EVENTS-PLSQL,WEEK,SAT,System: Techstack,"New User's can't be approved ,which are registered via the self registration",EBS ATG,EBS - Workflow and Integrations
 ME$EBS_FIN_PA_CAP_ASSET_LINES_MISSING_FA,"SELECT p.project_id project_id,
 l.project_asset_line_id project_asset_line_id,
 l.project_asset_line_detail_id project_asset_line_detail_id,

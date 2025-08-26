@@ -122,7 +122,6 @@ EBS Sensor: FIN FCA HQ Establishment Registration Number populated with NULL or 
 EBS Sensor: FIN GL Primary and secondary balances do not reconcile - Weekly,WEEK,SAT,1
 EBS Sensor: CRM SM Duplicate Funds Capture instrument assignments for bank accounts - Weekly,WEEK,SAT,1
 EBS Sensor: ATG CT Purge Consideration for FND LOBS Table to avoid abnormal growth - Weekly,WEEK,SAT,12
-EBS Sensor: ATG WF Workflow Mailer WF NOTIFICATION OUT N1 Index is Missing - Weekly,WEEK,SAT,12
 EBS Sensor: ATG CT Internal Concurrent Manager Actual and Target Process are Not Equal - Daily,DAY,1,12
 EBS Sensor: FIN AR Found end dated primary receipt methods - Weekly,WEEK,SAT,1
 EBS Sensor: FIN AP Stuck invoice after PPR is terminated or completed - Weekly,WEEK,SAT,1
@@ -153,7 +152,6 @@ EBS Sensor: FIN AP Invoice cancellation related issue - Weekly,WEEK,SAT,1
 EBS Sensor: FIN AP Invoice matching related issue - Weekly,WEEK,SAT,1
 EBS Sensor: FIN GL Mass Allocation batch or formula is Stuck In Process Status - Weekly,WEEK,SAT,1
 EBS Sensor: FIN PA Burden distributions missing for expendiutre items flagged as cost burden distributed - Weekly,WEEK,SAT,1
-EBS Sensor: ATG WF Workflow Mailer IMAP Connection Security is Not Set Correctly for Office365 - Daily,DAY,1,12
 EBS Sensor: MFG OM Booked SO Headers with non booked Lines - Weekly,WEEK,SAT,1
 EBS Sensor: FIN PA PRC Distribute Total Burdened Cost process errors with ADJ EI NOT DISTRIBUTED - Weekly,WEEK,SAT,1
 EBS Sensor: FIN AP Incorrect base amounts in Foreign currency invoice or payment - Weekly,WEEK,SAT,12
@@ -174,7 +172,6 @@ EBS Sensor: FIN GL Posted unbalanced journals - Weekly,WEEK,SAT,1
 EBS Sensor: HCM HR Overlapping records in assignments for employee data - Weekly,WEEK,SAT,1
 EBS Sensor: FIN AR Multiple Active Organization Profile - Weekly,WEEK,SAT,1
 EBS Sensor: FIN AP Invoice with Accounting dates out of sync with the Subledger Tables - Weekly,WEEK,SAT,1
-EBS Sensor: ATG WF Workflow Mailer Parameter ReplyTo is Not Set Properly due to this all emails will fail - Daily,DAY,1,12
 EBS Sensor: MFG PM The user is unable to close a batch that has OSP resource - Weekly,WEEK,SAT,12
 EBS Sensor: MFG OM Sales Order Lines Shipped but not Invoiced - Weekly,WEEK,SAT,1
 EBS Sensor: MFG INV Orphan move orders exist and need to be cleared - Weekly,WEEK,SAT,1
@@ -197,7 +194,6 @@ EBS Sensor: FIN AP Invoices removed from PPR are still showing Selected for Paym
 EBS Sensor: FIN GL Balances do not match posted journals for previous period - Weekly,WEEK,SAT,1
 EBS Sensor: FIN FA Books found with an incomplete depreciation status - Weekly,WEEK,SAT,1
 EBS Sensor: FIN AR Transaction Events in error - Weekly,WEEK,SAT,1
-EBS Sensor: ATG WF Sysadmin User Login Is Hanging or Takes A Lot Of Time - Weekly,WEEK,SAT,12
 EBS Sensor: ATG WF Workflow Services are Running with Statement Level Log - Weekly,WEEK,SAT,12
 EBS Sensor: HCM PAY OTL Rows with Time SQL column from Time Categories exceeding 29000 characters - Weekly,WEEK,SAT,1
 EBS Sensor: MFG PO Approved Requisition is associated to Blanket or Contract Agreement that is not Approved - Weekly,WEEK,SAT,1
@@ -205,9 +201,7 @@ EBS Sensor: HCM PAY OTL Purgeable Workflow count is more than 1000 - Monthly,MON
 EBS Sensor: FIN FCA OFFSET TAX RATE CODE is wrongly populated in ZX Lines - Weekly,WEEK,SAT,1
 EBS Sensor: FIN FCA The VAT REGISTRATION NUMBER is Null for the following Customers - Weekly,WEEK,SAT,1
 EBS Sensor: MFG PO Found unprocessed receiving events for the last 30 days - Monthly,MONTH,LAST,1
-EBS Sensor: ATG WF Orphan Notification that Needs to be Purged - Weekly,WEEK,MON,12
 EBS Sensor: FIN AP Checks with no corresponding invoice payment records - Weekly,WEEK,SAT,12
-EBS Sensor: ATG WF Workflow Mailer SMTP Connection Security is Not Set Correctly for Office365 - Weekly,WEEK,SAT,12
 EBS Sensor: ATG CT OPP Concurrent Manager Actual and Target Process are Not Equal - Daily,DAY,1,12
 EBS Sensor: FIN GL Journal Header And Lines Have Different GL Period And Date - Weekly,WEEK,SAT,1
 EBS Sensor: FIN GL Journal Import Ends With Error ED01 - Monthly,MONTH,LAST,1
@@ -232,7 +226,6 @@ EBS Sensor: MFG INV Errors are present in the Material Transactions Interface ta
 EBS Sensor: FIN AR Reversed Receipt has Multiple RECP REVERSE Events - Weekly,WEEK,SAT,1
 EBS Sensor: HCM PAY UK Legislation Approver for Employer Payment Summary does not have employee attached to user - Monthly,MONTH,LAST,12
 EBS Sensor: MFG PM Wrong PPV Setup in OPM Cost Component Class - Monthly,MONTH,LAST,12
-EBS Sensor: ATG WF Unable To Activate a User Responsibility Assignment that Existed Before Upgrade - Weekly,WEEK,SAT,12
 EBS Sensor: FIN AR Transaction Events in error GL Period not open - Weekly,WEEK,SUN,12
 EBS Sensor: MFG VCP MRP Sequence Check detected sequence in need of maintenance - Weekly,WEEK,SAT,1
 EBS Sensor: MFG PO PO stuck with error ORA 20002 Attribute NOTER Does Not Exist For Notification nnn - Weekly,WEEK,SAT,1
@@ -244,7 +237,6 @@ EBS Sensor: FIN PA Tasks Missing in the PA TASKS Table for Fully Shared Work Pla
 EBS Sensor: FIN GL Negative Intracompany Balancing Accounts - Weekly,WEEK,MON,12
 EBS Sensor: ATG WF Workflow Mailer Running with DEBUG MAIL SESSION Enabled - Weekly,WEEK,SAT,12
 EBS Sensor: ATG CT Standard Concurrent Manager Actual and Target Process are Not Equal - Daily,DAY,1,12
-EBS Sensor: ATG WF Workflow Deferred Agent Listener WF DEFERRED N1 Index is Missing - Weekly,WEEK,SAT,12
 EBS Sensor: HCM HR Benefits Enrollment rate rows exists where Enrollment results are Voided or Backed Out - Weekly,WEEK,SAT,1
 EBS Sensor: MFG PO Approved Requisition is associated to Blanket or Contract Agreement Past the End Date - Weekly,WEEK,SAT,1
 EBS Sensor: FIN AP Invoice prepayment related issue - Weekly,WEEK,SAT,1
@@ -269,7 +261,6 @@ EBS Sensor: MFG PO Approved Requisition is associated to Blanket or Contract Agr
 EBS Sensor: FIN AP Orphan check with no data in AP CHECKS ALL table - Weekly,WEEK,SAT,1
 EBS Sensor: FIN AP Checks which have different amounts in AP Checks and IBY Payments All - Weekly,WEEK,SAT,12
 EBS Sensor: FIN GL Journal Import Ends With Error EM30 - Monthly,MONTH,LAST,1
-EBS Sensor: ATG WF Workflow Mailer Configured with Same Account and Test Adrdress - Weekly,WEEK,SAT,12
 EBS Sensor: ATG CT There are more than 500k records in the FND CONCURRENT REQUESTS table - Weekly,WEEK,SAT,12
 EBS Sensor: FIN AP Payment history record missing for accounted checks - Weekly,WEEK,SAT,12
 EBS Sensor: FIN GL Error 12 During Funds Checking or Posting of Receivables Journals - Weekly,WEEK,SAT,1
@@ -330,7 +321,6 @@ EBS Sensor: MFG PO Items from GBPA or BPA not translated in iProcurement - Weekl
 EBS Sensor: FIN AR Transaction missing Payment Schedules records - Weekly,WEEK,SAT,1
 EBS Sensor: FIN PA The assets costs are not interfacing to FA - Weekly,WEEK,SAT,1
 EBS Sensor: ATG WF Notification Emails are not Getting Sent and Mailer Log Shows ORA 24010 - Daily,DAY,1,12
-EBS Sensor: ATG WF Workflow Mailer Goes Down After Autoconfig Run - Weekly,WEEK,MON,12
 EBS Sensor: MFG DM Create Accounting Cost management UnProcessed Event transactions in XLA Events - Weekly,WEEK,SAT,1
 EBS Sensor: FIN AP Duplicate external Payee in Iby External Payees All - Weekly,WEEK,SAT,1
 EBS Sensor: MFG INV Errors are present in the Material Transactions Temp table - Monthly,MONTH,25,1
@@ -341,7 +331,6 @@ EBS Sensor: MFG PO Oracle Text Intermedia search index is out of sync for some i
 EBS Sensor: FIN FCA Missing VAT Driving Date in EMEA VAT Setup - Weekly,WEEK,SAT,1
 EBS Sensor: MFG VCP MSCNEW MSCONEW Failing with Signal xx or APP MRP 22064 errors or Plan Output incorrect - Weekly,WEEK,SAT,1
 EBS Sensor: FIN GL Latest open period in GL LEDGERS is incorrect - Weekly,WEEK,SAT,1
-EBS Sensor: ATG WF Workflow Mailer Goes Down a due to Office365 Desupporting TLS1 0 and TLS1 1 - Weekly,WEEK,SAT,12
 EBS Sensor: FIN GL Journal Import Ends With Error EM01 Invalid journal entry category - Monthly,MONTH,LAST,1
 EBS Sensor: MFG INV Item orphan records are present in the MTL ITEM CATEGORIES table - Monthly,MONTH,1,12
 EBS Sensor: FIN PA Project asset costs not interfacing to FA - Weekly,WEEK,SAT,1
@@ -382,14 +371,11 @@ EBS Sensor: FIN GL Journal Entry Stuck In Process during Funds Reservation - Wee
 EBS Sensor: FIN PA Negative Line of The Recalculated Expenditure is Not Appearing In View Accounting - Weekly,WEEK,SAT,12
 EBS Sensor: FIN PA CDL lines rejected in Accounting with Original transaction not accounted error - Weekly,WEEK,SAT,1
 EBS Sensor: ATG WF There are no Purge Obsolete Workflow Runtime Data Program Scheduled to Run - Weekly,WEEK,SAT,12
-EBS Sensor: ATG WF High number of ADHOC roles creating login issue and hanging the OACORE server - Weekly,WEEK,MON:SAT,12
 EBS Sensor: FIN GL GL balances corruptions - Weekly,WEEK,SAT,1
 EBS Sensor: HCM PAY UK Legislation XML sender is not set - Weekly,WEEK,SAT,1
 EBS Sensor: HCM PAY Invalid Balance Attributes - Monthly,MONTH,LAST,12
 EBS Sensor: FIN PA create Accounting Fails for Revenue Category - Weekly,WEEK,TUE,12
 EBS Sensor: FIN PA Task data corrupted in Workplan tables WBS level outline number and parent child relations - Weekly,WEEK,SAT,1
-EBS Sensor: ATG WF Event oracle apps fnd umx requestapproved References Non existent Package AMW VIOLATION PVT - Weekly,WEEK,SAT,12
-EBS Sensor: ATG WF JTF APPR Workflow Error SENDNOTIFICATION must be declared When Approving User - Weekly,WEEK,SAT,12
 EBS Sensor: FIN PA Asset Lines Have Transferred Status But Are Missing In FA - Weekly,WEEK,SAT,1
 EBS Sensor: MFG PO Items from Master Items not translated - Weekly,WEEK,SAT,1
 EBS Sensor: FIN GL FAHRCS Segment Value Descriptions with Special Characters - Weekly,WEEK,SAT,1
